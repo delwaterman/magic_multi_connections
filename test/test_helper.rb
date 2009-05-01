@@ -1,5 +1,7 @@
 require 'test/unit'
 require 'rubygems'
+gem "activerecord", "<= 1.15.6"
+gem "activesupport", "<= 1.4.4"
 require 'active_record'
 require 'active_record/fixtures'
 

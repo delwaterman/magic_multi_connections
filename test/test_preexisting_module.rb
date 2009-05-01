@@ -16,13 +16,13 @@ class TestPreexistingModule < Test::Unit::TestCase
 
   def setup
     create_fixtures :people
-  end
+  end              s
   
-  def test_update_existing_classes
-    assert_equal("ActiveRecord::Base", Preexisting::Person.active_connection_name)
-    Preexisting.establish_connection :contact_repo
-    assert_equal("Preexisting::Person", Preexisting::Person.active_connection_name)
-  end
+#  def test_update_existing_classes
+#    assert_equal("ActiveRecord::Base", Preexisting::Person.active_connection_name)
+#    Preexisting.establish_connection :contact_repo
+#    assert_equal("Preexisting::Person", Preexisting::Person.active_connection_name)
+#  end
   
   # Rails can dynamically load classes when requested
   def test_update_on_load

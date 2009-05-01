@@ -79,11 +79,15 @@ module MagicMultiConnection::Connected
         result      
       end
     end
+
+    
     base.extend(ClassMethods)
   end
   
   module ClassMethods
     def establish_connection_on(klass)
+      puts "MagicMultiConnection::Connected::ClassMethods#establish_connection_on(#{klass}) called!"
+      raise "WHO CALLS ME?"
       klass.establish_connection self.connection_spec
     end
   end

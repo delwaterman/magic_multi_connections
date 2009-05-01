@@ -1,6 +1,10 @@
 $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
+require 'rubygems'
+gem "activerecord", "<= 1.15.6"
+gem "activesupport", "<= 1.4.4"
+
 unless defined?(ActiveSupport) && defined?(ActiveRecord)
   begin
     require 'active_support'  
