@@ -15,7 +15,15 @@ module MagicMultiConnection::Connected
         @namespace_reflections_mirror_db = value
       end
 
+      if MagicMultiConnection.using_connection_pool?
+        def self.get_connection_klass(ar_model)
+          return self.connection_klass if self.connection_klass
 
+          # This is the first time so we have to establish the connection
+          ar_model.establish_connection self.connection_spec
+          self.connection_klass = ar_model
+        end
+      end
 
       def const_missing(const_id)
         # Check for constant and verify that its not an ActiveRecord Object
@@ -39,14 +47,10 @@ module MagicMultiConnection::Connected
           def self.mmc_owner
             @@mmc_owner
           end
-
-
         end
 
 
-        if MagicMultiConnection.using_connection_pool?
-          MagicMultiConnections::ActiveRecordConnectionMethods.set_connection self, klass
-        else
+        unless MagicMultiConnection.using_connection_pool?   
           klass.establish_connection self.connection_spec
         end
 
@@ -98,17 +102,15 @@ module MagicMultiConnection::Connected
     end
     base.extend(ClassMethods)
   end
-  
+
+
+
   module ClassMethods
-    if MagicMultiConnection.using_connection_pool?
-      def retrieve_connection
-        
-      end
-    else
-      def establish_connection_on(klass)
-        klass.establish_connection self.connection_spec
-      end
+
+    def establish_connection_on(klass)
+      klass.establish_connection self.connection_spec
     end
+    
   end
 end
 

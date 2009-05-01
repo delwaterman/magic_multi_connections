@@ -5,7 +5,7 @@ class Module
     include MagicMultiConnection::Connected
     instance_variable_set '@connection_spec', connection_spec
     instance_variable_set '@namespace_reflections_mirror_db', namespace_reflections_mirror_db
-    update_active_records
+    update_active_records unless MagicMultiConnection.using_connection_pool?
   end
 
   if self.method_defined? :parent
@@ -26,11 +26,7 @@ class Module
       c = "#{self.name}::#{c_str}".constantize
       next unless c.is_a? Class
       next unless c.new.is_a? ActiveRecord::Base
-      if MagicMultiConnection.using_connection_pool?
-        MagicMultiConnections::ActiveRecordConnectionMethods.set_connection self, c
-      else
-        c.establish_connection connection_spec
-      end
+      c.establish_connection connection_spec
     end
   end
 end

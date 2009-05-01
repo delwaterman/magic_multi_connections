@@ -33,10 +33,6 @@ end
 require 'magic_multi_connections/version'
 require 'magic_multi_connections/connected'
 require 'magic_multi_connections/module'
-if MagicMultiConnection.using_connection_pool?
-  require 'magic_multi_connections/ar_connection_methods'
-else
-  require 'ext_active_record/connection_specification'
-end
+require 'ext_active_record/connection_specification'
 require 'ext_active_record/association_extensions'
 
