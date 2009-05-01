@@ -2,7 +2,8 @@ module MagicMultiConnection::Connected
   def self.included(base)
     base.instance_eval do
       alias :pre_connected_const_missing :const_missing
-      
+      mattr_accessor :connection_klass
+
       def namespace_reflections_mirror_db
         @namespace_reflections_mirror_db
       end
@@ -13,11 +14,18 @@ module MagicMultiConnection::Connected
         end
         @namespace_reflections_mirror_db = value
       end
-  
+
+
+
       def const_missing(const_id)
-        # return pre_connected_const_missing(const_id) rescue nil
+        # Check for constant and verify that its not an ActiveRecord Object
+        puts "const_missing called! #{const_id}"
+        const = pre_connected_const_missing(const_id) rescue nil
+        return const if const && !const.is_a?(ActiveRecord::Base)
+
+
         target_class = "#{self.parent_module}::#{const_id}".constantize rescue nil
-        raise NameError.new("uninitialized constant \{const_id}") unless target_class
+        raise NameError.new("uninitialized constant #{const_id}") unless target_class
         
         # The code below is used to solve an issue with the acts_as_versioned
         # plugin.  Because the acts_as_versioned plugin creates a 'Version' model
@@ -31,8 +39,17 @@ module MagicMultiConnection::Connected
           def self.mmc_owner
             @@mmc_owner
           end
-        end        
-        klass.establish_connection self.connection_spec
+
+
+        end
+
+
+        if MagicMultiConnection.using_connection_pool?
+          MagicMultiConnections::ActiveRecordConnectionMethods.set_connection self, klass
+        else
+          klass.establish_connection self.connection_spec
+        end
+
         klass
       end
 
@@ -83,8 +100,14 @@ module MagicMultiConnection::Connected
   end
   
   module ClassMethods
-    def establish_connection_on(klass)
-      klass.establish_connection self.connection_spec
+    if MagicMultiConnection.using_connection_pool?
+      def retrieve_connection
+        
+      end
+    else
+      def establish_connection_on(klass)
+        klass.establish_connection self.connection_spec
+      end
     end
   end
 end

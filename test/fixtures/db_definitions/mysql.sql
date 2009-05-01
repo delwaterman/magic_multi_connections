@@ -17,3 +17,25 @@ id INT(11) AUTO_INCREMENT PRIMARY KEY,
 person_id INT(11) NULL,
 description VARCHAR(255) NULL
 );
+-- Models for association tests
+DROP TABLE IF EXISTS soldiers;
+CREATE TABLE soldiers (
+id INT(11) AUTO_INCREMENT PRIMARY KEY
+);
+DROP TABLE IF EXISTS paychecks;
+CREATE TABLE paychecks (
+id INT(11) AUTO_INCREMENT PRIMARY KEY,
+soldier_id INT(11) NOT NULL
+);
+DROP TABLE IF EXISTS citations;
+CREATE TABLE citations (
+id INT(11) AUTO_INCREMENT PRIMARY KEY,
+soldier_id INT(11) NOT NULL
+);
+DROP TABLE IF EXISTS assignments;
+CREATE TABLE assignments (
+id INT(11) AUTO_INCREMENT PRIMARY KEY,
+soldier_id INT(11) NOT NULL
+);
+
+

@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+#require File.dirname(__FILE__) + '/../lib/sonic_udt.rb'
+#require 'commands/console'
+
+irb = RUBY_PLATFORM =~ /(:?mswin|mingw)/ ? 'irb.bat' : 'irb'
+
+libs =  " -r irb/completion"
+
+libs << " -r #{File.dirname(__FILE__) + '/../lib/magic_multi_connections.rb'}"
+exec "#{irb} #{libs} --simple-prompt"

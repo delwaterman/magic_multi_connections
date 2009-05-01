@@ -17,10 +17,10 @@ require File.dirname(__FILE__) + '/../lib/magic_multi_connections'
 models = %w[person contact_repository address soldier paycheck assignment classified habit citation]
 models.each { |model| require File.join(File.dirname(__FILE__), 'fixtures', model) }
 
-class Test::Unit::TestCase #:nodoc:
-  self.fixture_path = File.dirname(__FILE__) + "/fixtures/"
-  self.use_instantiated_fixtures = false
-  self.use_transactional_fixtures = true #(ENV['AR_NO_TX_FIXTURES'] != "yes")
+class ActiveSupport::TestCase #:nodoc:
+#  @fixture_path = File.dirname(__FILE__) + "/fixtures/"
+#  self.use_instantiated_fixtures = false
+#  self.use_transactional_fixtures = true #(ENV['AR_NO_TX_FIXTURES'] != "yes")
 
   def create_fixtures(*table_names, &block)
     Fixtures.create_fixtures(File.dirname(__FILE__) + "/fixtures/", table_names, {}, &block)

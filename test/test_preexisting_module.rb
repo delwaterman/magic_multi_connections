@@ -12,16 +12,16 @@ end
 module AnotherPre
 end
 
-class TestPreexistingModule < Test::Unit::TestCase
+class TestPreexistingModule < ActiveSupport::TestCase
 
   def setup
     create_fixtures :people
   end
   
   def test_update_existing_classes
-    assert_equal("ActiveRecord::Base", Preexisting::Person.active_connection_name)
+    assert_equal(ActiveRecord::Base.configurations['production'], Preexisting::Person.connection.instance_variable_get(:@config))
     Preexisting.establish_connection :contact_repo
-    assert_equal("Preexisting::Person", Preexisting::Person.active_connection_name)
+    assert_equal(ActiveRecord::Base.configurations['contact_repo'], Preexisting::Person.connection.instance_variable_get(:@config))
   end
   
   # Rails can dynamically load classes when requested
@@ -34,6 +34,6 @@ class TestPreexistingModule < Test::Unit::TestCase
     EOS
     assert(AnotherPre::Person.instance_methods.include?("tester"), "AnotherPre::Person should include #tester method")
     assert_equal("AnotherPre::Person", AnotherPre::Person.name)
-    assert_equal("AnotherPre::Person", AnotherPre::Person.active_connection_name)
+    assert_equal(ActiveRecord::Base.configurations['contact_repo'], AnotherPre::Person.connection.instance_variable_get(:@config))
   end
 end

@@ -7,20 +7,30 @@ class Module
     instance_variable_set '@namespace_reflections_mirror_db', namespace_reflections_mirror_db
     update_active_records
   end
-  
-  def parent_module
-    parent = self.name.split('::')[0..-2].join('::')
-    parent = 'Object' if parent.blank?
-    parent.constantize
+
+  if self.method_defined? :parent
+    alias_method :parent_module, :parent
+  else
+    def parent_module
+      parent = self.name.split('::')[0..-2].join('::')
+      parent = 'Object' if parent.blank?
+      parent.constantize
+    end
   end
+
   
   private 
   def update_active_records
     self.constants.each do |c_str|
+#      puts "Checking constant #{c_str}"
       c = "#{self.name}::#{c_str}".constantize
       next unless c.is_a? Class
       next unless c.new.is_a? ActiveRecord::Base
-      c.establish_connection connection_spec
+      if MagicMultiConnection.using_connection_pool?
+        MagicMultiConnections::ActiveRecordConnectionMethods.set_connection self, c
+      else
+        c.establish_connection connection_spec
+      end
     end
   end
 end

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
-class TestMmcAssociations < Test::Unit::TestCase
+class TestMmcAssociations < ActiveSupport::TestCase
 
   def setup
 
@@ -13,12 +13,12 @@ class TestMmcAssociations < Test::Unit::TestCase
       Paycheck
       Justice::Citation
     end
-    
+
     assert_equal Army::Assignment, Army::Soldier.reflections[:assignments].klass
     assert_equal Paycheck, Army::Soldier.reflections[:paychecks].klass
-    
+
     assert_equal true, Army::Classified.namespace_reflections_mirror_db
-    
+
     assert_nothing_raised(Exception) { Army::Classified::Soldier }
     assert_equal Army::Classified::Assignment, Army::Classified::Soldier.reflections[:assignments].klass
     assert_equal Paycheck, Army::Classified::Soldier.reflections[:paychecks].klass

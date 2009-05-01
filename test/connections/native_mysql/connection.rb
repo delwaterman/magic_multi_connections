@@ -8,7 +8,7 @@ db_connection_options = {
   :encoding => "utf8",
   :database => 'magic_multi_connections_unittest',
   :username => "ruby",
-  :password => "ruby"
+  :password => "j04n43nry"
 }
 
 db_extra_connection_options = {
@@ -16,7 +16,7 @@ db_extra_connection_options = {
   :encoding => "utf8",
   :database => 'magic_multi_connections_extra_unittest',
   :username => "ruby",
-  :password => "ruby"
+  :password => "j04n43nry"
 }
 
 

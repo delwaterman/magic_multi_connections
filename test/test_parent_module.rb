@@ -9,7 +9,7 @@ module A
   end
 end
 
-class TestParentModule < Test::Unit::TestCase
+class TestParentModule < ActiveSupport::TestCase
 
   def test_method
     assert_equal(A::B::C, A::B::C::Z.parent_module)
