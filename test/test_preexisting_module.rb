@@ -16,7 +16,7 @@ class TestPreexistingModule < Test::Unit::TestCase
 
   def setup
     create_fixtures :people
-  end              s
+  end              
   
 #  def test_update_existing_classes
 #    assert_equal("ActiveRecord::Base", Preexisting::Person.active_connection_name)
