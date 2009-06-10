@@ -9,9 +9,10 @@ module MagicMultiConnection::Connected
       end
   
       def namespace_reflections_mirror_db=(value)
-        if value
-          warn "DEPRACATION WARNING: Automatic namespace associations will be removed in the next major release of this gem. Please use explicit association statments."
-        end
+        # TODO Need to re-evaluate what is the best way to proceed with this namespacing issues.
+#        if value
+#          warn "DEPRACATION WARNING: Automatic namespace associations will be removed in the next major release of this gem. Please use explicit association statments."
+#        end
         @namespace_reflections_mirror_db = value
       end
 
@@ -27,7 +28,6 @@ module MagicMultiConnection::Connected
 
       def const_missing(const_id)
         # Check for constant and verify that its not an ActiveRecord Object
-        puts "const_missing called! #{const_id}"
         const = pre_connected_const_missing(const_id) rescue nil
         return const if const && !const.is_a?(ActiveRecord::Base)
 
